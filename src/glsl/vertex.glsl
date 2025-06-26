@@ -4,8 +4,11 @@ layout (location = 1) in vec3 aColor;
 
 out vec3 vertexColor;
 
-void main()
+uniform vec3 dc;
+
+void main(void)
 {
   gl_Position = vec4(aPos.x, aPos.y, 0, 1.0);
-  vertexColor = aColor;
+
+  vertexColor = abs(aColor - dc);
 }

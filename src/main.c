@@ -1,3 +1,6 @@
+#include <math.h>
+#include <stdio.h>
+
 #include "defer.h"
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -30,6 +33,7 @@ int main(void)
 
   GLFWwindow* window = glfwCreateWindow(1280, 720, "COPYPASTA", NULL, NULL);
   glfwMakeContextCurrent(window);
+  glfwSetFramebufferSizeCallback(window, frame_buffer_size_callback);
 
   if (glewInit()) {
     MLOG("GL", "GLEW could not initialized! {CODE %d}: %s\n", glGetError(), glewGetErrorString(glGetError()));
@@ -54,10 +58,10 @@ int main(void)
   glDeleteShader(fragment_shader);
 
   float vertices[] = {
-    -0.5f, -0.5f, 1.0, 0.0, 0.0, // bottom left
-     0.5f, -0.5f, 0.0, 1.0, 0.0, // bottom right
-    -0.5f,  0.5f, 0.0, 0.0, 1.0, // top left
-     0.5f,  0.5f, 1.0, 1.0, 1.0  // top right
+    -1.0f, -1.0f, 1.0, 0.0, 0.0, // bottom left
+     1.0f, -1.0f, 0.0, 1.0, 0.0, // bottom right
+    -1.0f,  1.0f, 0.0, 0.0, 1.0, // top left
+     1.0f,  1.0f, 1.0, 1.0, 0.0  // top right
   };
 
   unsigned int indices[] = {
@@ -90,11 +94,16 @@ int main(void)
   glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+  int dcid = glGetUniformLocation(program, "dc");
+
   while (!glfwWindowShouldClose(window)) {
-    glClearColor(0.1, 0.0, 0.0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(program);
+
+    double dc = sin(glfwGetTime()) / 2 + 0.5;
+    glUniform3f(dcid, dc, dc , dc);
+
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
