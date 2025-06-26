@@ -1,8 +1,8 @@
-Copypasta
----
+# Copypasta
 My ready-to-use OpenGL template
+<br>
 
-## Compilation
+### Compilation
 
 The template uses [nob.h](https://github.com/tsoding/nob.h), so the only build program you need is your C compiler.
 
